@@ -1,0 +1,19 @@
+{
+    "name": "klazapp.inspector.editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:d161eadcbabe3458780e7d4497e0f22a",
+        "GUID:d8b63aba1907145bea998dd612889d6b",
+        "GUID:aa002eef81f9741f9a6809ae878e69e2",
+        "GUID:ccfe4693463b3458da638186a0e616ca"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

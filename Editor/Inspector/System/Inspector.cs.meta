@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: eddf222005cf74c7cbb589b8c6134e31
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - editScriptIcon: {fileID: 2800000, guid: 42aa7372deb134b86bb6cf6faec795de, type: 3}
+  - openScriptLocationIcon: {fileID: 2800000, guid: 97644804d95134adb8ead2a8354c76ae,
+      type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
