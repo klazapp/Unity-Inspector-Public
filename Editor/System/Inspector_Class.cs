@@ -77,14 +77,14 @@ namespace com.Klazapp.Editor
             // return className;
 
             var className = "";
-            if (parentType != null)
+           if (parentType != null)
             {
-                className = isInheritingFromCustomClass ? parentType.ToString() : targetType.ToString();
+                className = isInheritingFromCustomClass ? parentType.Name : targetType.Name;
             }
             
             if (!getParentClass)
             {
-                className = targetType.ToString();
+                className = targetType.Name;
             }
 
             return className;
