@@ -58,20 +58,33 @@ namespace com.Klazapp.Editor
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private string GetClassName(bool getParentClass)
         {
-            //Get property paths of the parent class
+           //Get property paths of the parent class
             var targetType = serializedObject.targetObject.GetType();
             var parentType = targetType.BaseType;
-            var parentPropertyPaths = parentType != null ? GetPropertyPathsOfType(parentType) : new List<string>();
-            var className = AddSpacesToSentence(targetType.ToString());
+            
+            //Disabled temporarily as even namespaces are being printed
+            //var className = AddSpacesToSentence(targetType.ToString());
+            // if (parentType != null)
+            // {
+            //     className = AddSpacesToSentence(isInheritingFromCustomClass ? parentType.ToString() : targetType.ToString());
+            // }
+            //
+            // if (!getParentClass)
+            // {
+            //     className = AddSpacesToSentence(targetType.ToString());
+            // }
+            //
+            // return className;
 
+            var className = "";
             if (parentType != null)
             {
-                className = AddSpacesToSentence(isInheritingFromCustomClass ? parentType.ToString() : targetType.ToString());
+                className = isInheritingFromCustomClass ? parentType.ToString() : targetType.ToString();
             }
-
+            
             if (!getParentClass)
             {
-                className = AddSpacesToSentence(targetType.ToString());
+                className = targetType.ToString();
             }
 
             return className;
