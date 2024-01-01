@@ -1,7 +1,9 @@
+using System;
 using System.Runtime.CompilerServices;
 using UnityEditor;
 using UnityEngine;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 namespace com.Klazapp.Editor
@@ -58,7 +60,7 @@ namespace com.Klazapp.Editor
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private string GetClassName(bool getParentClass)
         {
-           //Get property paths of the parent class
+            //Get property paths of the parent class
             var targetType = serializedObject.targetObject.GetType();
             var parentType = targetType.BaseType;
             
@@ -77,17 +79,30 @@ namespace com.Klazapp.Editor
             // return className;
 
             var className = "";
-           if (parentType != null)
+            if (parentType != null)
             {
-                className = isInheritingFromCustomClass ? parentType.Name : targetType.Name;
+                className = GetReadableTypeName(isInheritingFromCustomClass ? parentType : targetType);
             }
             
             if (!getParentClass)
             {
-                className = targetType.Name;
+                className = GetReadableTypeName(targetType);
             }
 
             return className;
+        }
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static string GetReadableTypeName(Type type)
+        {
+            if (!type.IsGenericType)
+            {
+                return type.Name;
+            }
+        
+            var typeName = type.Name[..type.Name.IndexOf('`')];
+            var genericArgs = string.Join(", ", type.GetGenericArguments().Select(t => t.Name));
+            return $"{typeName}<{genericArgs}>";
         }
         
         
