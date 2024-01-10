@@ -126,7 +126,7 @@ namespace com.Klazapp.Editor
         internal static string GetCurrentScriptName(SerializedObject serializedObj)
         {
             var targetType = serializedObj.targetObject.GetType();
-            return targetType.FullName;
+            return targetType.Name;
         }
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
