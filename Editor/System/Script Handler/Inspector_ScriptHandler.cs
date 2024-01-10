@@ -8,12 +8,20 @@ namespace com.Klazapp.Editor
 {
     public partial class Inspector
     {
-        private InspectorEditScriptComponent inspectorEditScriptComponent = new();
-        private InspectorOpenScriptLocationComponent inspectorOpenScriptLocationComponent = new();
+        private readonly InspectorEditScriptComponent inspectorEditScriptComponent = new();
+        private readonly InspectorOpenScriptLocationComponent inspectorOpenScriptLocationComponent = new();
         
         public Texture2D editScriptIcon;
         public Texture2D openScriptLocationIcon;
-
+        public Texture2D scriptIcon;
+        public Texture2D scriptIcon2;
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private void OnCreatedScriptHandler()
+        {
+            
+        }
+        
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void OnDisplayEditScript()
         {
@@ -82,34 +90,63 @@ namespace com.Klazapp.Editor
         }
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void OpenScriptLocation()
+        private void EditScript(UnityEngine.Object loadedObject, string assetPath)
         {
-            var targetObjects = serializedObject.targetObjects;
+            AssetDatabase.OpenAsset(loadedObject);
+        }
 
-            MonoScript obj;
-            var assetPath = "";
-            UnityEngine.Object loadedObj = new(); 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static string GetParentScriptName(SerializedObject serializedObj)
+        {
+            var targetType = serializedObj.targetObject.GetType();
+            var baseType = targetType.BaseType;
+            return baseType != null ? GetFriendlyName(baseType) : "";
 
-            switch (targetObjects[^1])
+            #region Local Function
+            string GetFriendlyName(Type type)
             {
-                case MonoBehaviour monoBehaviour:
-                    obj = MonoScript.FromMonoBehaviour(monoBehaviour);
-                    assetPath = AssetDatabase.GetAssetPath(obj);
-                    loadedObj = EditorGUIUtility.Load(assetPath);
-                    break;
-                case ScriptableObject scriptableObject:
-                    obj = MonoScript.FromScriptableObject(scriptableObject);
-                    assetPath = AssetDatabase.GetAssetPath(obj);
-                    loadedObj = EditorGUIUtility.Load(assetPath);
-                    break;
-                default:
-                    LogMessage.DebugError("This is neither a monobehaviour nor a scriptable object");
-                    break;
+                if (!type.IsGenericType)
+                {
+                    return type.Name;
+                }
+
+                var name = type.Name;
+                var backtickIndex = name.IndexOf('`');
+                if (backtickIndex != -1)
+                {
+                    name = name.Remove(backtickIndex);
+                }
+
+                return name;
             }
+            #endregion
+        }
 
-            if (loadedObj == null)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static string GetCurrentScriptName(SerializedObject serializedObj)
+        {
+            var targetType = serializedObj.targetObject.GetType();
+            return targetType.FullName;
+        }
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static (UnityEngine.Object loadedObject, string assetPath) GetScriptObjectAndPath(string assetName)
+        {
+            //Specify looking for script assets via t:script
+            var searchFilter = assetName + " t:script";
+            var guids = AssetDatabase.FindAssets(searchFilter, new[] { InspectorClassGroupModule.FOLDER_FILTER });
+            var assetPath = AssetDatabase.GUIDToAssetPath(guids[^1]);
+            var loadedObject = EditorGUIUtility.Load(assetPath);
+            
+            return (loadedObject, assetPath);
+        }
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static void OpenScriptLocation(UnityEngine.Object loadedObject, string assetPath)
+        {
+            if (loadedObject == null)
             {
-                LogMessage.DebugError("Could not find monobehaviour or scriptable object");
+                LogMessage.DebugError("Could not find mono behaviour or scriptable object");
             }
             else
             {
@@ -141,7 +178,7 @@ namespace com.Klazapp.Editor
                     loadedFocusedObj.GetInstanceID(), true
                 });
                         
-                EditorGUIUtility.PingObject(loadedObj);
+                EditorGUIUtility.PingObject(loadedObject);
             }
         }
 
@@ -196,11 +233,11 @@ namespace com.Klazapp.Editor
                 {
                     inspectorOpenScriptLocationComponent.pointerDown = false;
                     inspectorOpenScriptLocationComponent.pointerUp = false;
-                    
-                    OpenScriptLocation();
+
+                    var currentScriptName = GetCurrentScriptName(serializedObject);
+                    var (loadedObject, assetPath) = GetScriptObjectAndPath(currentScriptName);
+                    OpenScriptLocation(loadedObject, assetPath);
                 }
-                
-                Repaint();
             }
             
             if (!CustomEditorHelper.OnPointerUp()) 
@@ -211,8 +248,6 @@ namespace com.Klazapp.Editor
                 
             inspectorOpenScriptLocationComponent.pointerDown = false;
             inspectorOpenScriptLocationComponent.pointerUp = false;
-                    
-            Repaint();
         }
     }
 }

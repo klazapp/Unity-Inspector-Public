@@ -3,8 +3,6 @@ using System.Runtime.CompilerServices;
 using UnityEditor;
 using UnityEngine;
 using com.Klazapp.Utility;
-using UnityEditor.SceneManagement;
-using UnityEngine.SceneManagement;
 
 namespace com.Klazapp.Editor
 {
@@ -12,11 +10,8 @@ namespace com.Klazapp.Editor
     [CustomEditor(typeof(UnityEngine.Object), editorForChildClasses: true)]
     public partial class Inspector : InspectorBase
     {
-        //Padding size
-        const float PADDING_SIZE = -15f;
-        
         #region Base Flow
-        private void OnEnable()
+        internal void OnEnable()
         {
             OnCreated();
         }
@@ -24,35 +19,53 @@ namespace com.Klazapp.Editor
         public override void OnInspectorGUI()
         {
             OnDisplayed();
-            
-            if (GUI.changed)
-            {
-                EditorUtility.SetDirty(this);
-                EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
-            }
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected override void OnCreated()
         {
-            OnCreateHeader();
+            if (!IsValidObject())
+                return;
+
+            OnCreatedHeader();
+
+            OnCreatedScriptHandler();
+            OnCreatedViewHandler();
+            
+            OnCreatedProperties();
         }
-        
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected override void OnDisplayed()
         {
+            if (!IsValidObject())
+            {
+                base.OnInspectorGUI();
+                return;
+            }
+            
+            serializedObject.Update();
+
+            OnCreatedSkinProperties();
+            
             OnDisplayHeader();
 
             CustomEditorHelper.DrawHorizontalLine(10);
             
-            OnDisplayEditScript();
+            OnDisplayViewHandler();
             
             CustomEditorHelper.DrawHorizontalLine(10);
             
             OnDisplayProperties();
+            
+            serializedObject.ApplyModifiedProperties();
+          
         }
         #endregion
-        
+
+        //TODO: Attribute checks only work in main partial class.
+        //TODO: Fix it so that it can be put in appropriate sub partial classes
+        #region Attribute Checks
         #region Attribute Check only works in main partial class. figure out why
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static bool CheckIfHasAttribute<TAttribute>(SerializedProperty prop, bool inherit) where TAttribute : PropertyAttribute
@@ -285,6 +298,7 @@ namespace com.Klazapp.Editor
             //return attributes.Length > 0 ? attributes[0] : null;
             return attributes is { Length: > 0 };
         }
+        #endregion
         #endregion
     }
 }

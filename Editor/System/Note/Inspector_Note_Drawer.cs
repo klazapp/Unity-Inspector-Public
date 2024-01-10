@@ -7,10 +7,15 @@ namespace com.Klazapp.Editor
     public partial class Inspector
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static void DrawNotes(bool hasNotes, SerializedProperty serializedProperty)
+        private static void DrawNotes(int width = 0, int height = 0, bool hasNotes = false, SerializedProperty serializedProperty = null, bool hasReadOnly = false)
         {
             if (!hasNotes)
                 return;
+
+            if (hasReadOnly)
+            {
+                GUI.enabled = false;
+            }
             
             var (noteTitle, noteDescription) = GetNoteAttributeDetails(serializedProperty, true);
 
@@ -28,7 +33,7 @@ namespace com.Klazapp.Editor
                     alignment = TextAnchor.MiddleLeft,
                 };
                     
-                CustomEditorHelper.DrawBoxWithBackground((int)EditorGUIUtility.currentViewWidth - 200, 20, 5, new Color32(55, 215, 212, 15), new Color32(64, 86, 112, 255), noteTitle, titleStyle);
+                CustomEditorHelper.DrawBoxWithBackground(width, height, 5, new Color32(55, 215, 212, 15), new Color32(64, 86, 112, 255), noteTitle, titleStyle);
             }
 
             if (string.IsNullOrEmpty(noteDescription)) 
@@ -47,6 +52,11 @@ namespace com.Klazapp.Editor
             };
                     
             CustomEditorHelper.DrawBoxWithBackground((int)EditorGUIUtility.currentViewWidth - 200, 10, 5, new Color32(55, 215, 212, 15), new Color32(64, 66, 62, 255), noteDescription, descriptionStyle);
+            
+            if (hasReadOnly)
+            {
+                GUI.enabled = true;
+            }
         }
     }
 }

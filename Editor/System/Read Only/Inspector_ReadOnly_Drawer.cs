@@ -7,13 +7,16 @@ namespace com.Klazapp.Editor
     public partial class Inspector
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static void DrawReadOnly(SerializedProperty serializedProperty, bool hasNotes)
+        private static void DrawReadOnly(int width = 0, int height = 0, SerializedProperty serializedProperty = null, bool hasReadOnly = true)
         {
+            if (!hasReadOnly)
+                return;
+            
             GUIStyle readOnlyTitleStyle = new()
             {
                 fontSize = 12,
-                fontStyle = FontStyle.Bold,
-                alignment = TextAnchor.MiddleCenter,
+                fontStyle = FontStyle.Normal,
+                alignment = TextAnchor.MiddleLeft,
                 wordWrap = true,
                 normal =
                 {
@@ -23,11 +26,8 @@ namespace com.Klazapp.Editor
             };
 
             GUI.enabled = false;
-            CustomEditorHelper.DrawBox((int)EditorGUIUtility.currentViewWidth - 200, 20, new Color32(34, 45, 54, 255), "READ ONLY", readOnlyTitleStyle);
-                    
-            DrawNotes(hasNotes, serializedProperty);
-                    
-            CustomEditorHelper.DrawProperty(serializedProperty, (int)EditorGUIUtility.currentViewWidth - 200, 0, true);
+            
+            CustomEditorHelper.DrawBox(width, height, new Color32(34, 45, 54, 255), "Read Only", readOnlyTitleStyle);
 
             GUI.enabled = true;
         }
