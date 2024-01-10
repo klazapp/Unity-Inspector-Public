@@ -134,7 +134,8 @@ namespace com.Klazapp.Editor
         {
             //Specify looking for script assets via t:script
             var searchFilter = assetName + " t:script";
-            var guids = AssetDatabase.FindAssets(searchFilter, new[] { InspectorClassGroupModule.FOLDER_FILTER });
+            string[] searchInFolders = { "Assets", "Packages" };
+            var guids = AssetDatabase.FindAssets(searchFilter, searchInFolders );
             var assetPath = AssetDatabase.GUIDToAssetPath(guids[^1]);
             var loadedObject = EditorGUIUtility.Load(assetPath);
             
