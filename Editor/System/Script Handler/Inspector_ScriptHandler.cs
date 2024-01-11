@@ -132,11 +132,30 @@ namespace com.Klazapp.Editor
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static (UnityEngine.Object loadedObject, string assetPath) GetScriptObjectAndPath(string assetName)
         {
-            //Specify looking for script assets via t:script
+             //Specify looking for script assets via t:script
             var searchFilter = assetName + " t:script";
             string[] searchInFolders = { "Assets", "Packages" };
-            var guids = AssetDatabase.FindAssets(searchFilter, searchInFolders );
-            var assetPath = AssetDatabase.GUIDToAssetPath(guids[^1]);
+            var guids = AssetDatabase.FindAssets(searchFilter, searchInFolders);
+
+            List<string> filteredGuids = new List<string>();
+            foreach (var guid in guids)
+            {
+                string path = AssetDatabase.GUIDToAssetPath(guid).ToLower(); // Convert path to lowercase
+                string searchKeyword = "klazapp".ToLower(); // Convert search keyword to lowercase
+
+                // Add assets from the 'Assets' folder
+                if (path.StartsWith("assets/"))
+                {
+                    filteredGuids.Add(guid);
+                }
+                // Add assets from the 'Packages' folder that contain 'klazapp' (case-insensitive) in their path
+                else if (path.StartsWith("packages/") && path.Contains(searchKeyword))
+                {
+                    filteredGuids.Add(guid);
+                }
+            }
+            
+            var assetPath = AssetDatabase.GUIDToAssetPath(filteredGuids[^1]);
             var loadedObject = EditorGUIUtility.Load(assetPath);
             
             return (loadedObject, assetPath);
