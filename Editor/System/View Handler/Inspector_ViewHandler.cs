@@ -8,9 +8,13 @@ namespace com.Klazapp.Editor
     {
         internal static InspectorViewHandlerModule inspectorViewHandlerModule;
         
-        public Texture2D customViewIcon;
-        public Texture2D classicViewIcon;
-        public Texture2D debugViewIcon;
+        public Texture2D deselectedCustomViewIcon;
+        public Texture2D deselectedClassicViewIcon;
+        public Texture2D deselectedDebugViewIcon;
+        
+        public Texture2D selectedCustomViewIcon;
+        public Texture2D selectedClassicViewIcon;
+        public Texture2D selectedDebugViewIcon;
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void OnCreatedViewHandler()
@@ -19,7 +23,7 @@ namespace com.Klazapp.Editor
             inspectorViewHandlerModule.OnCreated();
         }
         
-        //[MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void OnDisplayViewHandler()
         {
             EditorGUILayout.BeginHorizontal();
@@ -28,20 +32,41 @@ namespace com.Klazapp.Editor
             
             EditorGUILayout.BeginHorizontal(GUI.skin.box);
 
-            CustomEditorHelper.DrawBox(40, 40, inspectorViewHandlerModule.customViewComponent.GetColorByClickState(inspectorViewHandlerModule.customViewComponent.pointerDown, inspectorViewHandlerModule.customViewComponent.pointerUp), "", inspectorViewHandlerModule.viewContentStyle, customViewIcon);
+            CustomEditorHelper.DrawBox(40, 40,
+                inspectorViewHandlerModule.customViewComponent.GetColorByClickState(
+                    inspectorViewHandlerModule.customViewComponent.pointerDown,
+                    inspectorViewHandlerModule.customViewComponent.pointerUp), "",
+                inspectorViewHandlerModule.viewContentStyle,
+                InspectorViewHandlerModule.inspectorViewHandlerMode == InspectorViewHandlerMode.Custom
+                    ? selectedClassicViewIcon
+                    : deselectedClassicViewIcon);
 
             CheckCustomViewPointerState();
             
             CustomEditorHelper.DrawSpace(50);
                 
-            CustomEditorHelper.DrawBox(40, 40, inspectorViewHandlerModule.classicViewComponent.GetColorByClickState(inspectorViewHandlerModule.classicViewComponent.pointerDown, inspectorViewHandlerModule.classicViewComponent.pointerUp), "", inspectorViewHandlerModule.viewContentStyle, classicViewIcon);
-    
+            CustomEditorHelper.DrawBox(40, 40,
+                inspectorViewHandlerModule.classicViewComponent.GetColorByClickState(
+                    inspectorViewHandlerModule.classicViewComponent.pointerDown,
+                    inspectorViewHandlerModule.classicViewComponent.pointerUp), "",
+                inspectorViewHandlerModule.viewContentStyle,
+                InspectorViewHandlerModule.inspectorViewHandlerMode == InspectorViewHandlerMode.Classic
+                    ? selectedCustomViewIcon
+                    : deselectedCustomViewIcon);
+            
             CheckClassViewPointerState();
              
             CustomEditorHelper.DrawSpace(50);
                 
-            CustomEditorHelper.DrawBox(40, 40, inspectorViewHandlerModule.debugViewComponent.GetColorByClickState(inspectorViewHandlerModule.debugViewComponent.pointerDown, inspectorViewHandlerModule.debugViewComponent.pointerUp), "", inspectorViewHandlerModule.viewContentStyle, debugViewIcon);
-    
+            CustomEditorHelper.DrawBox(40, 40,
+                inspectorViewHandlerModule.debugViewComponent.GetColorByClickState(
+                    inspectorViewHandlerModule.debugViewComponent.pointerDown,
+                    inspectorViewHandlerModule.debugViewComponent.pointerUp), "",
+                inspectorViewHandlerModule.viewContentStyle,
+                InspectorViewHandlerModule.inspectorViewHandlerMode == InspectorViewHandlerMode.Debug
+                    ? selectedDebugViewIcon
+                    : deselectedDebugViewIcon);
+            
             CheckDebugViewPointerState();
             
             EditorGUILayout.EndHorizontal();
