@@ -312,14 +312,17 @@ namespace com.Klazapp.Editor
             return (parentProperties, childProperties);
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        //[MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static List<SerializedProperty> GetChildren(SerializedProperty serializedProperty)
         {
-            //Check if property is struct
-            var propertyIsStruct = IsStruct(serializedProperty);
-
             var children = new List<SerializedProperty>();
 
+            if (serializedProperty == null)
+                return children;
+            
+            //Check if property is struct
+            var propertyIsStruct = IsStruct(serializedProperty);
+            
             if (!serializedProperty.hasChildren)
                 return children;
 
@@ -362,7 +365,14 @@ namespace com.Klazapp.Editor
         private static bool IsStruct(SerializedProperty property)
         {
             var obj = GetTargetObjectOfProperty(property);
+
+            if (obj == null)
+            {
+                return false;
+            }
+            
             var type = obj.GetType();
+
             return type.IsValueType && !type.IsPrimitive && !type.IsEnum;
         }
 
