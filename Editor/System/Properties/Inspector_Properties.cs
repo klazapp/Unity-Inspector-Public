@@ -312,7 +312,7 @@ namespace com.Klazapp.Editor
             return (parentProperties, childProperties);
         }
 
-        //[MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static List<SerializedProperty> GetChildren(SerializedProperty serializedProperty)
         {
             var children = new List<SerializedProperty>();
