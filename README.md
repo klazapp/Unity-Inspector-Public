@@ -12,7 +12,7 @@ The `Inspector` utility, part of the `com.Klazapp.Utility` namespace, is is a ke
 To use `Inspector`, certain dependencies are required. Ensure these are included in your Unity project.
 - **Unity Version**: Minimum Unity 2020.3 LTS.
 - **Repository**: [LogMessage Unity Logger](https://github.com/klazapp/Unity-Logger-Public.git)
-- **Repository**: [LogMessage Unity Logger](https://github.com/klazapp/Unity-Editor-Helper-Public.git)
+- **Repository**: [LogMessage Unity Editor Helper](https://github.com/klazapp/Unity-Editor-Helper-Public.git)
 - Unity Mathematics dll
 
 ## Compatibility
