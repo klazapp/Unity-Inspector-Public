@@ -1,38 +1,78 @@
-# Inspector Utility for Unity
+# Unity Inspector Package
 
-## Introduction
-The `Inspector` utility, part of the `com.Klazapp.Utility` namespace, is is a key component of the Editor interface and provides a visual representation of the properties and settings of a selected GameObject or asset. Its primary purpose is to allow developers to inspect and modify the attributes of Unity objects, such as GameObjects, components, materials, and other assets.
+The Unity Inspector package provided by `com.Klazapp` enhances the default Unity Inspector with added functionalities for better visibility and interaction with object properties in the Unity Editor. This package includes attributes and editors that allow developers to add detailed notes, handle script editing directly from the inspector, and toggle views for custom visualization of components.
 
 ## Features
-- Displays a list of properties and fields associated with the selected GameObject or asset.
-- Provides details about the object, including its name, tag, layer, and active state.
-- Integrates with the Hierarchy window, allowing you to select objects in the scene or project and inspect their properties.
+
+- **Script Headers**: Add descriptive headers to your scripts with `ScriptHeader` attributes.
+- **Todo Headers**: Mark areas of your code needing attention with `TodoHeader` attributes.
+- **Note Attributes**: Attach notes directly to fields or properties to describe behavior or requirements.
+- **ReadOnly Fields**: Mark fields as read-only in the inspector to prevent unwanted changes.
+- **Enhanced Inspector Views**: Toggle between custom, classic, and debug views within the inspector to suit your workflow.
+- **Script Interaction**: Directly open and edit scripts from the inspector.
+- **Property Grouping**: Organize properties visually by parent and child classes for clarity.
 
 ## Dependencies
-To use `Inspector`, certain dependencies are required. Ensure these are included in your Unity project.
-- **Unity Version**: Minimum Unity 2020.3 LTS.
-- **Repository**: [LogMessage Unity Logger](https://github.com/klazapp/Unity-Logger-Public.git)
-- **Repository**: [LogMessage Unity Editor Helper](https://github.com/klazapp/Unity-Editor-Helper-Public.git)
-- Unity Mathematics dll
+
+- Unity 2020.3 LTS or later
+- .NET Standard 2.0 or later
 
 ## Compatibility
-| Compatibility        | URP | BRP | HDRP |
-|----------------------|-----|-----|------|
-| Compatible           | ✔️  | ✔️  | ✔️   |
+| Compatibility | URP | BRP | HDRP |
+|---------------|-----|-----|------|
+| Compatible    | ✔️   | ✔️   | ✔️    |
 
 ## Installation
-1. Open the Unity Package Manager (`Window` > `Package Manager`).
-2. Click `+`, select `Add package from git URL...`, and enter `https://github.com/klazapp/Unity-Inspector-Public.git`.
-3. Unity will download and make the package available in your project.
+
+1. Download the latest release from the [Releases page](#).
+2. Import the package into your Unity project by navigating to `Assets -> Import Package -> Custom Package` and selecting the downloaded file.
 
 ## Usage
+
+### Script Headers
+
+Apply the `ScriptHeader` attribute to your classes to add a descriptive header above the class in the Unity Inspector.
+
 ```csharp
-Write Something here
+[ScriptHeader("This is a descriptive header for MyClass.")]
+public class MyClass : MonoBehaviour
+{
+}
 ```
 
-## To-Do List (Future Features)
-- 
+### Todo Headers
+
+Use the `TodoHeader` to mark scripts or sections of code that need future revisions.
+
+```csharp
+[TodoHeader("This needs to be refactored for better performance.")]
+public class MyComponent : MonoBehaviour
+{
+}
+```
+
+### ReadOnly Fields
+
+Prevent modifications to fields in the Unity Editor by applying the `ReadOnlyAttribute`.
+
+```csharp
+public class PlayerSettings : MonoBehaviour
+{
+    [ReadOnly]
+    public int playerHealth = 100;
+}
+```
+
+### Viewing and Editing Scripts
+
+The inspector extensions allow you to view and edit scripts directly from the inspector without searching through your project folders.
+
+## To-Do List
+
+- Add support for array and list visual enhancements.
+- Implement color-coded notes for better visibility.
+- Increase customization options for developer preferences.
 
 ## License
-This utility is released under the [MIT License](LICENSE).
 
+This package is released under the MIT License. See the LICENSE file in the repository for full details.
